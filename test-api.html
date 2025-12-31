@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار Heygen API - مفصل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #6366f1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .error {
+            border-right: 4px solid #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .success {
+            border-right: 4px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .log {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        .log-entry {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .log-entry.error {
+            color: #ef4444;
+        }
+        .log-entry.success {
+            color: #10b981;
+        }
+        .log-entry.info {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 اختبار Pixverse API - مفصل</h1>
+        <p style="text-align: center; color: #cbd5e1; margin-bottom: 2rem;">
+            استخدم هذه الصفحة لاختبار الاتصال بـ Pixverse API ومعرفة الخطأ بالضبط
+        </p>
+        
+        <div class="form-group">
+            <label>النص للتحويل إلى فيديو (Pixverse):</label>
+            <textarea id="textInput" placeholder="أدخل النص هنا...">مرحباً، هذا اختبار لإنشاء فيديو باستخدام Pixverse API.</textarea>
+        </div>
+        
+        <button onclick="testAPI()">🚀 اختبار API</button>
+        
+        <div id="result"></div>
+        <div id="log" class="log" style="display: none;"></div>
+    </div>
+
+    <script>
+        function addLog(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            logDiv.style.display = 'block';
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function testAPI() {
+            const textInput = document.getElementById('textInput').value;
+            const resultDiv = document.getElementById('result');
+            const button = event.target;
+            const logDiv = document.getElementById('log');
+            logDiv.innerHTML = '';
+            
+            if (!textInput) {
+                alert('يرجى إدخال النص');
+                return;
+            }
+            
+            button.disabled = true;
+            button.textContent = 'جاري الاختبار...';
+            resultDiv.innerHTML = '<div class="result">جاري إرسال الطلب...</div>';
+            addLog('بدء الاختبار...', 'info');
+            addLog(`Text length: ${textInput.length}`, 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/generate-video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: textInput
+                    })
+                });
+                
+                const result = await response.json();
+                
+                addLog(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+                addLog(`Response: ${JSON.stringify(result, null, 2)}`, 'info');
+                
+                if (response.ok && result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ نجح الاتصال!</h3>
+                            <p><strong>Endpoint المستخدم:</strong> ${result.endpoint}</p>
+                            <pre>${JSON.stringify(result.data, null, 2)}</pre>
+                        </div>
+                    `;
+                    addLog('✅ نجح الاتصال!', 'success');
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <h3>❌ فشل الاتصال</h3>
+                            <p><strong>الخطأ:</strong> ${result.error || 'خطأ غير معروف'}</p>
+                            <p><strong>الرسالة:</strong> ${result.message || ''}</p>
+                            ${result.details ? `<p><strong>التفاصيل:</strong> ${JSON.stringify(result.details, null, 2)}</p>` : ''}
+                            ${result.debug ? `<pre>${JSON.stringify(result.debug, null, 2)}</pre>` : ''}
+                        </div>
+                    `;
+                    addLog('❌ فشل الاتصال', 'error');
+                }
+            } catch (error) {
+                addLog(`خطأ في الاتصال: ${error.message}`, 'error');
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ خطأ في الاتصال</h3>
+                        <p><strong>الخطأ:</strong> ${error.message}</p>
+                        <p style="margin-top: 1rem; color: #cbd5e1;">
+                            تأكد من أن الخادم يعمل على http://localhost:3000
+                        </p>
+                    </div>
+                `;
+            } finally {
+                button.disabled = false;
+                button.textContent = '🚀 اختبار API';
+            }
+        }
+    </script>
+</body>
+</html>
+

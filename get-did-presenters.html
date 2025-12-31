@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحصول على D-ID Presenter ID</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .method {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #667eea;
+        }
+        .method h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .input-group {
+            margin: 1rem 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        .result {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .error {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+        .success {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        .info-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 طرق بديلة للحصول على D-ID Presenter ID</h1>
+        
+        <div class="info-box">
+            <strong>💡 ملاحظة:</strong> إذا لم تجد قسم Presenters في D-ID، يمكنك استخدام إحدى الطرق التالية:<br>
+            <strong>⚠️ مهم:</strong> تأكد من تحديث D-ID API Key في server.js وتشغيل الخادم (npm start) أولاً!
+        </div>
+
+        <!-- Method 1: API Call -->
+        <div class="method">
+            <h2>الطريقة 1: استخدام API للحصول على قائمة Presenters</h2>
+            <p style="margin-bottom: 1rem;">أدخل D-ID API Key وسنحصل على قائمة الـ Presenters المتاحة:</p>
+            <div class="input-group">
+                <label>D-ID API Key (يجب تحديثه في server.js أولاً):</label>
+                <input type="text" id="apiKey" placeholder="الصق D-ID API Key هنا (للمعلومات فقط)...">
+            </div>
+            <div class="info-box" style="margin: 1rem 0;">
+                <strong>⚠️ مهم:</strong> يجب تحديث D-ID API Key في ملف server.js أولاً، ثم تشغيل الخادم (npm start)
+            </div>
+            <button onclick="getPresenters()">🔍 الحصول على Presenters</button>
+            <div id="presentersResult"></div>
+        </div>
+
+        <!-- Method 2: Use Default Presenter -->
+        <div class="method">
+            <h2>الطريقة 2: استخدام Presenter افتراضي</h2>
+            <p style="margin-bottom: 1rem;">يمكنك استخدام أحد الـ Presenters الافتراضية التالية:</p>
+            <div class="code-box">
+                <div>// Presenters افتراضية من D-ID:</div>
+                <div style="margin-top: 0.5rem;">
+                    <div>amy-jcwCkr1grs (أنثى)</div>
+                    <div>amy-7WYHSYhx (أنثى)</div>
+                    <div>tom-0lR1-6xak (ذكر)</div>
+                    <div>sara-7WYHSYhx (أنثى)</div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>اختر Presenter ID:</label>
+                <input type="text" id="defaultPresenter" value="amy-jcwCkr1grs" placeholder="amy-jcwCkr1grs">
+            </div>
+            <button onclick="copyDefaultPresenter()">📋 نسخ Presenter ID</button>
+        </div>
+
+        <!-- Method 3: Create New Presenter -->
+        <div class="method">
+            <h2>الطريقة 3: إنشاء Presenter جديد عبر API</h2>
+            <p style="margin-bottom: 1rem;">أنشئ presenter جديد برفع صورة:</p>
+            <div class="input-group">
+                <label>D-ID API Key (يجب تحديثه في server.js أولاً):</label>
+                <input type="text" id="createApiKey" placeholder="الصق D-ID API Key هنا (للمعلومات فقط)...">
+            </div>
+            <div class="info-box" style="margin: 1rem 0;">
+                <strong>⚠️ مهم:</strong> يجب تحديث D-ID API Key في ملف server.js أولاً، ثم تشغيل الخادم (npm start)
+            </div>
+            <div class="input-group">
+                <label>رابط الصورة (Image URL):</label>
+                <input type="text" id="imageUrl" placeholder="https://example.com/image.jpg">
+            </div>
+            <button onclick="createPresenter()">➕ إنشاء Presenter جديد</button>
+            <div id="createResult"></div>
+        </div>
+
+        <!-- Method 4: Use Source URL directly -->
+        <div class="method">
+            <h2>الطريقة 4: استخدام رابط الصورة مباشرة</h2>
+            <p style="margin-bottom: 1rem;">بدلاً من Presenter ID، يمكنك استخدام رابط الصورة مباشرة:</p>
+            <div class="input-group">
+                <label>رابط الصورة (Image URL):</label>
+                <input type="text" id="sourceUrl" placeholder="https://example.com/character.jpg">
+            </div>
+            <div class="info-box">
+                <strong>💡 نصيحة:</strong> يمكنك رفع صورة إلى أي خدمة استضافة صور (مثل imgur.com) واستخدام الرابط
+            </div>
+            <button onclick="copySourceUrl()">📋 نسخ Source URL</button>
+        </div>
+    </div>
+
+    <script>
+        async function getPresenters() {
+            const apiKey = document.getElementById('apiKey').value;
+            const resultDiv = document.getElementById('presentersResult');
+            
+            if (!apiKey) {
+                resultDiv.innerHTML = '<div class="result error">يرجى إدخال D-ID API Key</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result">جاري جلب Presenters...</div>';
+            
+            try {
+                // Use backend server to avoid CORS
+                const response = await fetch('http://localhost:3000/api/did/presenters', {
+                    method: 'GET'
+                });
+                
+                const responseText = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    // If not JSON, show the raw response
+                    resultDiv.innerHTML = `<div class="result error">
+                        <strong>خطأ في تحليل الرد:</strong><br>
+                        ${responseText.substring(0, 200)}<br><br>
+                        <strong>الحل:</strong><br>
+                        1. تأكد من تحديث D-ID API Key في server.js<br>
+                        2. تأكد من تشغيل الخادم (npm start)<br>
+                        3. استخدم الطريقة 2 (Presenter افتراضي) كبديل
+                    </div>`;
+                    return;
+                }
+                
+                if (response.ok && (data.presenters || data.length > 0)) {
+                    const presenters = data.presenters || data;
+                    let html = '<div class="result success"><strong>✅ تم العثور على Presenters:</strong><ul style="margin-top: 1rem; padding-right: 1.5rem;">';
+                    presenters.forEach(presenter => {
+                        const presenterId = presenter.id || presenter.presenter_id || presenter;
+                        const presenterName = presenter.name || presenterId;
+                        html += `<li style="margin: 0.5rem 0;"><strong>${presenterName}</strong>: <code>${presenterId}</code> <button onclick="copyId('${presenterId}')" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-right: 0.5rem;">نسخ</button></li>`;
+                    });
+                    html += '</ul></div>';
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+                        <strong>لا يمكن الوصول إلى API:</strong><br>
+                        ${data.error || data.message || JSON.stringify(data)}<br><br>
+                        <strong>الحل:</strong><br>
+                        1. تأكد من تحديث D-ID API Key في server.js<br>
+                        2. تأكد من تشغيل الخادم (npm start)<br>
+                        3. استخدم الطريقة 2 (Presenter افتراضي) كبديل
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>خطأ في الاتصال:</strong><br>
+                    ${error.message}<br><br>
+                    <strong>الحل:</strong><br>
+                    1. تأكد من تشغيل الخادم: <code>npm start</code><br>
+                    2. تأكد من أن الخادم يعمل على http://localhost:3000<br>
+                    3. استخدم الطريقة 2 (Presenter افتراضي) كبديل
+                </div>`;
+            }
+        }
+        
+        function copyId(id) {
+            navigator.clipboard.writeText(id).then(() => {
+                alert(`✅ تم نسخ Presenter ID: ${id}`);
+            });
+        }
+        
+        function copyDefaultPresenter() {
+            const presenterId = document.getElementById('defaultPresenter').value;
+            navigator.clipboard.writeText(presenterId).then(() => {
+                alert(`✅ تم نسخ Presenter ID: ${presenterId}`);
+            });
+        }
+        
+        async function createPresenter() {
+            const apiKey = document.getElementById('createApiKey').value;
+            const imageUrl = document.getElementById('imageUrl').value;
+            const resultDiv = document.getElementById('createResult');
+            
+            if (!apiKey || !imageUrl) {
+                resultDiv.innerHTML = '<div class="result error">يرجى إدخال API Key ورابط الصورة</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result">جاري إنشاء Presenter...</div>';
+            
+            try {
+                // Use backend endpoint
+                const response = await fetch('http://localhost:3000/api/did/presenters', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        source_url: imageUrl
+                    })
+                });
+                
+                const responseText = await response.text();
+                let data;
+                
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    resultDiv.innerHTML = `<div class="result error">
+                        <strong>خطأ في تحليل الرد:</strong><br>
+                        ${responseText.substring(0, 200)}<br><br>
+                        <strong>الحل:</strong><br>
+                        1. تأكد من تحديث D-ID API Key في server.js<br>
+                        2. تأكد من تشغيل الخادم (npm start)
+                    </div>`;
+                    return;
+                }
+                
+                if (response.ok && (data.id || data.presenter_id)) {
+                    const presenterId = data.id || data.presenter_id;
+                    resultDiv.innerHTML = `<div class="result success"><strong>✅ تم إنشاء Presenter بنجاح!</strong><br>Presenter ID: <code>${presenterId}</code> <button onclick="copyId('${presenterId}')" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-right: 0.5rem;">نسخ</button></div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+                        <strong>فشل إنشاء Presenter:</strong><br>
+                        ${data.error || data.message || JSON.stringify(data)}<br><br>
+                        <strong>الحل:</strong><br>
+                        1. تأكد من تحديث D-ID API Key في server.js<br>
+                        2. تأكد من أن رابط الصورة صحيح ومتاح
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+                    <strong>خطأ في الاتصال:</strong><br>
+                    ${error.message}<br><br>
+                    <strong>الحل:</strong><br>
+                    1. تأكد من تشغيل الخادم: <code>npm start</code><br>
+                    2. تأكد من أن الخادم يعمل على http://localhost:3000
+                </div>`;
+            }
+        }
+        
+        function copySourceUrl() {
+            const sourceUrl = document.getElementById('sourceUrl').value;
+            if (!sourceUrl) {
+                alert('يرجى إدخال رابط الصورة أولاً');
+                return;
+            }
+            navigator.clipboard.writeText(sourceUrl).then(() => {
+                alert(`✅ تم نسخ Source URL. استخدمه في server.js كـ source_url`);
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار D-ID و ElevenLabs APIs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #6366f1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #6366f1;
+        }
+        .section h2 {
+            color: #6366f1;
+            margin-bottom: 1rem;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .result.success {
+            border-right: 4px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .result.error {
+            border-right: 4px solid #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .result.info {
+            border-right: 4px solid #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .status.success {
+            background: #10b981;
+            color: white;
+        }
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+        .status.pending {
+            background: #f59e0b;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 اختبار D-ID و ElevenLabs APIs</h1>
+        <p style="text-align: center; color: #cbd5e1; margin-bottom: 2rem;">
+            استخدم هذه الصفحة للتحقق من أن جميع APIs تعمل بشكل صحيح
+        </p>
+
+        <!-- Test 1: Server Connection -->
+        <div class="section">
+            <h2>1. اختبار الاتصال بالخادم</h2>
+            <button onclick="testServer()">🔌 اختبار الخادم</button>
+            <div id="serverResult"></div>
+        </div>
+
+        <!-- Test 2: D-ID API -->
+        <div class="section">
+            <h2>2. اختبار D-ID API</h2>
+            <button onclick="testDID()">🎭 اختبار D-ID</button>
+            <div id="didResult"></div>
+        </div>
+
+        <!-- Test 3: ElevenLabs API -->
+        <div class="section">
+            <h2>3. اختبار ElevenLabs API</h2>
+            <button onclick="testElevenLabs()">🎤 اختبار ElevenLabs</button>
+            <div id="elevenlabsResult"></div>
+        </div>
+
+        <!-- Test 4: Full Video Generation -->
+        <div class="section">
+            <h2>4. اختبار إنشاء فيديو كامل</h2>
+            <button onclick="testFullVideo()">🎬 اختبار إنشاء فيديو</button>
+            <div id="videoResult"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testServer() {
+            const resultDiv = document.getElementById('serverResult');
+            resultDiv.innerHTML = '<div class="result info">جاري الاختبار...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/generate-video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: 'test'
+                    })
+                });
+                
+                if (response.status !== 400 && response.status !== 500) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <span class="status success">✅ نجح</span>
+                            <p>الخادم يعمل بشكل صحيح</p>
+                        </div>
+                    `;
+                } else {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <div class="result ${response.ok ? 'success' : 'error'}">
+                            <span class="status ${response.ok ? 'success' : 'error'}">${response.ok ? '✅' : '❌'} ${response.status}</span>
+                            <p>الخادم يعمل لكن هناك مشكلة في الطلب</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">❌ فشل</span>
+                        <p><strong>خطأ:</strong> ${error.message}</p>
+                        <p style="margin-top: 0.5rem;">تأكد من تشغيل الخادم: <code>npm start</code></p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testDID() {
+            const resultDiv = document.getElementById('didResult');
+            resultDiv.innerHTML = '<div class="result info">جاري اختبار D-ID API...</div>';
+            
+            try {
+                // Test getting presenters
+                const response = await fetch('http://localhost:3000/api/did/presenters', {
+                    method: 'GET'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <span class="status success">✅ نجح</span>
+                            <p><strong>D-ID API يعمل بشكل صحيح!</strong></p>
+                            <p style="margin-top: 0.5rem;">تم العثور على ${data.presenters ? data.presenters.length : 0} presenter</p>
+                            <pre>${JSON.stringify(data, null, 2).substring(0, 500)}...</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <span class="status error">❌ فشل</span>
+                            <p><strong>خطأ:</strong> ${data.error || data.message || 'خطأ غير معروف'}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">❌ فشل</span>
+                        <p><strong>خطأ:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testElevenLabs() {
+            const resultDiv = document.getElementById('elevenlabsResult');
+            resultDiv.innerHTML = '<div class="result info">جاري اختبار ElevenLabs API...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/generate-audio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: 'مرحباً، هذا اختبار لصوت ElevenLabs'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <span class="status success">✅ نجح</span>
+                            <p><strong>ElevenLabs API يعمل بشكل صحيح!</strong></p>
+                            <p style="margin-top: 0.5rem;">تم إنشاء الصوت بنجاح</p>
+                            <p>Format: ${data.audio_format}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <span class="status error">❌ فشل</span>
+                            <p><strong>خطأ:</strong> ${data.error || data.message || 'خطأ غير معروف'}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">❌ فشل</span>
+                        <p><strong>خطأ:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testFullVideo() {
+            const resultDiv = document.getElementById('videoResult');
+            resultDiv.innerHTML = '<div class="result info">جاري اختبار إنشاء فيديو كامل...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/generate-video', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: 'مرحباً، هذا اختبار لإنشاء فيديو باستخدام D-ID و ElevenLabs'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <span class="status success">✅ نجح</span>
+                            <p><strong>تم بدء إنشاء الفيديو!</strong></p>
+                            <p style="margin-top: 0.5rem;">Video ID: <code>${data.video_id}</code></p>
+                            <p>جاري معالجة الفيديو... قد يستغرق بضع دقائق</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result error">
+                            <span class="status error">❌ فشل</span>
+                            <p><strong>خطأ:</strong> ${data.error || data.message || 'خطأ غير معروف'}</p>
+                            <p style="margin-top: 0.5rem;"><strong>التفاصيل:</strong></p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <span class="status error">❌ فشل</span>
+                        <p><strong>خطأ:</strong> ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+

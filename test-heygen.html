@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار Heygen API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 2rem;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #6366f1;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-right: 4px solid #6366f1;
+        }
+        .error {
+            border-right-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .success {
+            border-right-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 اختبار Heygen API</h1>
+        <p style="color: #cbd5e1; margin-bottom: 2rem;">استخدم هذه الصفحة لاختبار اتصال Heygen API ومعرفة المشكلة</p>
+        
+        <div class="form-group">
+            <label>مفتاح API:</label>
+            <input type="text" id="apiKey" value="sk_V2_hgu_kXEKoQ8bGyO_22ZdR33UYzQDJDsV7ToP4qBHFd6yZPzX" placeholder="أدخل مفتاح API">
+        </div>
+        
+        <div class="form-group">
+            <label>Avatar ID:</label>
+            <input type="text" id="avatarId" value="default" placeholder="أدخل Avatar ID (مثل: avatar_xxxxx)">
+        </div>
+        
+        <div class="form-group">
+            <label>Voice ID:</label>
+            <input type="text" id="voiceId" value="ar-SA-Male" placeholder="أدخل Voice ID (مثل: ar-SA-Male)">
+        </div>
+        
+        <div class="form-group">
+            <label>النص للتحويل إلى فيديو:</label>
+            <textarea id="textInput" placeholder="أدخل النص هنا...">مرحباً، هذا اختبار لإنشاء فيديو باستخدام Heygen API.</textarea>
+        </div>
+        
+        <button onclick="testAPI()">🚀 اختبار API</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const apiKey = document.getElementById('apiKey').value;
+            const avatarId = document.getElementById('avatarId').value;
+            const voiceId = document.getElementById('voiceId').value;
+            const textInput = document.getElementById('textInput').value;
+            const resultDiv = document.getElementById('result');
+            const button = event.target;
+            
+            if (!apiKey || !textInput) {
+                alert('يرجى ملء جميع الحقول');
+                return;
+            }
+            
+            button.disabled = true;
+            button.textContent = 'جاري الاختبار...';
+            resultDiv.innerHTML = '<div class="result">جاري إرسال الطلب...</div>';
+            
+            const endpoints = [
+                {
+                    name: 'Endpoint 1: /v2/video.generate (X-Api-Key)',
+                    url: 'https://api.heygen.com/v2/video.generate',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Api-Key': apiKey
+                    }
+                },
+                {
+                    name: 'Endpoint 2: /v1/video.generate (X-Api-Key)',
+                    url: 'https://api.heygen.com/v1/video.generate',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Api-Key': apiKey
+                    }
+                },
+                {
+                    name: 'Endpoint 3: /v2/video.generate (Bearer)',
+                    url: 'https://api.heygen.com/v2/video.generate',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    }
+                }
+            ];
+            
+            let results = [];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint.url, {
+                        method: 'POST',
+                        headers: endpoint.headers,
+                        body: JSON.stringify({
+                            video_inputs: [{
+                                character: {
+                                    type: 'avatar',
+                                    avatar_id: avatarId
+                                },
+                                voice: {
+                                    type: 'text',
+                                    input_text: textInput,
+                                    voice_id: voiceId
+                                }
+                            }],
+                            dimension: {
+                                width: 1280,
+                                height: 720
+                            }
+                        })
+                    });
+                    
+                    const responseText = await response.text();
+                    let responseData;
+                    try {
+                        responseData = JSON.parse(responseText);
+                    } catch (e) {
+                        responseData = responseText;
+                    }
+                    
+                    results.push({
+                        endpoint: endpoint.name,
+                        status: response.status,
+                        ok: response.ok,
+                        data: responseData
+                    });
+                } catch (error) {
+                    results.push({
+                        endpoint: endpoint.name,
+                        status: 'Error',
+                        ok: false,
+                        error: error.message
+                    });
+                }
+            }
+            
+            // Display results
+            let html = '<div class="result">';
+            html += '<h3>نتائج الاختبار:</h3>';
+            
+            results.forEach((result, index) => {
+                const isSuccess = result.ok && result.status === 200;
+                html += `<div class="result ${isSuccess ? 'success' : 'error'}" style="margin-top: 1rem;">`;
+                html += `<h4>${result.endpoint}</h4>`;
+                html += `<p><strong>الحالة:</strong> ${result.status}</p>`;
+                
+                if (result.error) {
+                    html += `<p style="color: #ef4444;"><strong>خطأ:</strong> ${result.error}</p>`;
+                } else {
+                    html += `<pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+                }
+                
+                html += '</div>';
+            });
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+            
+            button.disabled = false;
+            button.textContent = '🚀 اختبار API';
+        }
+    </script>
+</body>
+</html>
+

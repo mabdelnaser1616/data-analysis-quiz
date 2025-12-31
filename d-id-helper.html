@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد D-ID و ElevenLabs - جمع المعلومات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #667eea;
+        }
+        .section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .step {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #e0e0e0;
+        }
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .link-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .link-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .info-box {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .info-box strong {
+            color: #1976D2;
+        }
+        .input-group {
+            margin: 1rem 0;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .copy-btn:hover {
+            background: #218838;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-right: 2rem;
+            position: relative;
+        }
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            right: 0;
+            font-size: 1.2rem;
+        }
+        .checklist li.done:before {
+            content: "✓";
+            color: #28a745;
+        }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 مساعد D-ID و ElevenLabs</h1>
+        <p class="subtitle">دليل شامل لجمع جميع المعلومات المطلوبة</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('did')">D-ID</button>
+            <button class="tab" onclick="showTab('elevenlabs')">ElevenLabs</button>
+            <button class="tab" onclick="showTab('code')">الكود النهائي</button>
+        </div>
+
+        <!-- D-ID Tab -->
+        <div id="did-tab" class="tab-content active">
+            <div class="section">
+                <h2>🔑 D-ID - الحصول على API Key</h2>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>سجّل حساب جديد:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>اذهب إلى: <a href="https://studio.d-id.com" target="_blank" class="link-btn">D-ID Studio</a></li>
+                        <li>اضغط على "Sign Up" أو "Get Started"</li>
+                        <li>سجّل حساب جديد (يمكن استخدام Gmail)</li>
+                    </ol>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>احصل على API Key:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>بعد تسجيل الدخول، اضغط على <strong>صورة الملف الشخصي</strong> (أعلى اليمين)</li>
+                        <li>اختر <strong>"API"</strong> أو <strong>"API Keys"</strong></li>
+                        <li>اضغط <strong>"Create API Key"</strong> أو <strong>"Generate New Key"</strong></li>
+                        <li>انسخ المفتاح فوراً واحفظه</li>
+                    </ol>
+                    <a href="https://studio.d-id.com/settings/api" target="_blank" class="link-btn">🔗 فتح صفحة API Settings</a>
+                </div>
+                <div class="info-box">
+                    <strong>⚠️ تحذير:</strong> المفتاح يظهر مرة واحدة فقط! تأكد من نسخه فوراً.
+                </div>
+                <div class="input-group">
+                    <label>D-ID API Key:</label>
+                    <input type="text" id="didApiKey" placeholder="الصق D-ID API Key هنا..." oninput="updateCode()">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎭 D-ID - الحصول على Presenter ID (الشخصية)</h2>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>اذهب إلى قسم Presenters:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>من القائمة الرئيسية، اختر <strong>"Presenters"</strong> أو <strong>"Characters"</strong></li>
+                        <li>أو اذهب مباشرة إلى: <a href="https://studio.d-id.com/presenters" target="_blank" class="link-btn">D-ID Presenters</a></li>
+                    </ol>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>اختر أو أنشئ شخصية:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>تصفح الشخصيات المتاحة</li>
+                        <li>اختر شخصية كرتونية أو واقعية</li>
+                        <li>اضغط على الشخصية لفتحها</li>
+                        <li>انسخ <strong>Presenter ID</strong> من معلومات الشخصية</li>
+                    </ol>
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>⚠️ لا تجد Presenter ID؟</strong><br>
+                        <a href="get-did-presenters.html" target="_blank" style="color: #667eea; text-decoration: underline;">افتح صفحة الطرق البديلة</a> للحصول على Presenter ID
+                    </div>
+                </div>
+                <div class="info-box">
+                    <strong>💡 نصيحة:</strong> Presenter ID عادة يكون مثل: <code>amy-jcwCkr1grs</code> أو رقم/معرف فريد<br>
+                    <strong>بديل:</strong> يمكنك استخدام Presenter افتراضي: <code>amy-jcwCkr1grs</code>
+                </div>
+                <div class="input-group">
+                    <label>D-ID Presenter ID (أو اتركه فارغاً لاستخدام الافتراضي):</label>
+                    <input type="text" id="didPresenterId" placeholder="amy-jcwCkr1grs" value="amy-jcwCkr1grs" oninput="updateCode()">
+                </div>
+            </div>
+        </div>
+
+        <!-- ElevenLabs Tab -->
+        <div id="elevenlabs-tab" class="tab-content">
+            <div class="section">
+                <h2>🔑 ElevenLabs - الحصول على API Key</h2>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>سجّل حساب جديد:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>اذهب إلى: <a href="https://elevenlabs.io" target="_blank" class="link-btn">ElevenLabs</a></li>
+                        <li>اضغط على "Sign Up"</li>
+                        <li>سجّل حساب جديد</li>
+                    </ol>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>احصل على API Key:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>بعد تسجيل الدخول، اضغط على <strong>صورة الملف الشخصي</strong></li>
+                        <li>اختر <strong>"Profile"</strong> أو <strong>"Settings"</strong></li>
+                        <li>اذهب إلى قسم <strong>"API Keys"</strong></li>
+                        <li>اضغط <strong>"Create API Key"</strong></li>
+                        <li>انسخ المفتاح فوراً</li>
+                    </ol>
+                    <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" class="link-btn">🔗 فتح صفحة API Keys</a>
+                </div>
+                <div class="info-box">
+                    <strong>⚠️ تحذير:</strong> المفتاح يظهر مرة واحدة فقط! تأكد من نسخه فوراً.
+                </div>
+                <div class="input-group">
+                    <label>ElevenLabs API Key:</label>
+                    <input type="text" id="elevenlabsApiKey" placeholder="الصق ElevenLabs API Key هنا..." oninput="updateCode()">
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎤 ElevenLabs - الحصول على Voice ID (الصوت العربي)</h2>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>اذهب إلى قسم Voices:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>من القائمة الرئيسية، اختر <strong>"Voices"</strong></li>
+                        <li>أو اذهب مباشرة إلى: <a href="https://elevenlabs.io/app/voices" target="_blank" class="link-btn">ElevenLabs Voices</a></li>
+                    </ol>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>ابحث عن صوت عربي:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>في مربع البحث، اكتب: <strong>"Arabic"</strong> أو <strong>"Saudi"</strong></li>
+                        <li>تصفح الأصوات العربية المتاحة</li>
+                        <li>اختر صوت بلهجة سعودية (إن وجد)</li>
+                        <li>اضغط على الصوت للاستماع</li>
+                        <li>انسخ <strong>Voice ID</strong> من معلومات الصوت</li>
+                    </ol>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>أو أنشئ صوت مخصص:</strong>
+                    <ol style="margin: 0.5rem 0; padding-right: 1.5rem;">
+                        <li>اضغط <strong>"Add Voice"</strong></li>
+                        <li>اختر <strong>"Voice Design"</strong> أو <strong>"Instant Voice"</strong></li>
+                        <li>صمم صوت عربي بلهجة سعودية</li>
+                        <li>احفظه وانسخ Voice ID</li>
+                    </ol>
+                </div>
+                <div class="info-box">
+                    <strong>💡 نصيحة:</strong> Voice ID عادة يكون مثل: <code>21m00Tcm4TlvDq8ikWAM</code> أو معرف فريد
+                </div>
+                <div class="input-group">
+                    <label>ElevenLabs Voice ID:</label>
+                    <input type="text" id="elevenlabsVoiceId" placeholder="الصق Voice ID هنا..." oninput="updateCode()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Tab -->
+        <div id="code-tab" class="tab-content">
+            <div class="section">
+                <h2>📋 الكود النهائي</h2>
+                <p style="margin-bottom: 1rem;">بعد جمع جميع المعلومات، انسخ الكود التالي:</p>
+                <div class="code-box" id="codeOutput">
+                    <div style="color: #f92672;">// افتح ملف server.js وحدث هذه الأسطر:</div>
+                    <div style="margin-top: 1rem;">
+                        <div style="color: #a6e22e;">const DID_API_KEY</div> = <div style="color: #e6db74;" id="didApiKeyOutput">'YOUR_DID_API_KEY_HERE'</div>;<br><br>
+                        <div style="color: #a6e22e;">const DID_PRESENTER_ID</div> = <div style="color: #e6db74;" id="didPresenterIdOutput">'YOUR_PRESENTER_ID_HERE'</div>;<br><br>
+                        <div style="color: #a6e22e;">const ELEVENLABS_API_KEY</div> = <div style="color: #e6db74;" id="elevenlabsApiKeyOutput">'YOUR_ELEVENLABS_API_KEY_HERE'</div>;<br><br>
+                        <div style="color: #a6e22e;">const ELEVENLABS_VOICE_ID</div> = <div style="color: #e6db74;" id="elevenlabsVoiceIdOutput">'YOUR_VOICE_ID_HERE'</div>;
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copyCode()">📋 نسخ الكود</button>
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>⚠️ مهم:</strong> بعد التحديث، أعد تشغيل الخادم (Ctrl+C ثم npm start)
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✅ قائمة التحقق</h2>
+                <ul class="checklist">
+                    <li id="check1">حصلت على D-ID API Key</li>
+                    <li id="check2">حصلت على D-ID Presenter ID</li>
+                    <li id="check3">حصلت على ElevenLabs API Key</li>
+                    <li id="check4">حصلت على ElevenLabs Voice ID</li>
+                    <li id="check5">حدثت ملف server.js</li>
+                    <li id="check6">أعدت تشغيل الخادم</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateCode() {
+            const didApiKey = document.getElementById('didApiKey').value || 'YOUR_DID_API_KEY_HERE';
+            const didPresenterId = document.getElementById('didPresenterId').value || 'YOUR_PRESENTER_ID_HERE';
+            const elevenlabsApiKey = document.getElementById('elevenlabsApiKey').value || 'YOUR_ELEVENLABS_API_KEY_HERE';
+            const elevenlabsVoiceId = document.getElementById('elevenlabsVoiceId').value || 'YOUR_VOICE_ID_HERE';
+            
+            document.getElementById('didApiKeyOutput').textContent = `'${didApiKey}'`;
+            document.getElementById('didPresenterIdOutput').textContent = `'${didPresenterId}'`;
+            document.getElementById('elevenlabsApiKeyOutput').textContent = `'${elevenlabsApiKey}'`;
+            document.getElementById('elevenlabsVoiceIdOutput').textContent = `'${elevenlabsVoiceId}'`;
+            
+            // Update checklist
+            document.getElementById('check1').classList.toggle('done', didApiKey && didApiKey !== 'YOUR_DID_API_KEY_HERE');
+            document.getElementById('check2').classList.toggle('done', didPresenterId && didPresenterId !== 'YOUR_PRESENTER_ID_HERE');
+            document.getElementById('check3').classList.toggle('done', elevenlabsApiKey && elevenlabsApiKey !== 'YOUR_ELEVENLABS_API_KEY_HERE');
+            document.getElementById('check4').classList.toggle('done', elevenlabsVoiceId && elevenlabsVoiceId !== 'YOUR_VOICE_ID_HERE');
+        }
+
+        function copyCode() {
+            const didApiKey = document.getElementById('didApiKey').value || 'YOUR_DID_API_KEY_HERE';
+            const didPresenterId = document.getElementById('didPresenterId').value || 'YOUR_PRESENTER_ID_HERE';
+            const elevenlabsApiKey = document.getElementById('elevenlabsApiKey').value || 'YOUR_ELEVENLABS_API_KEY_HERE';
+            const elevenlabsVoiceId = document.getElementById('elevenlabsVoiceId').value || 'YOUR_VOICE_ID_HERE';
+            
+            const code = `const DID_API_KEY = '${didApiKey}';
+const DID_PRESENTER_ID = '${didPresenterId}';
+const ELEVENLABS_API_KEY = '${elevenlabsApiKey}';
+const ELEVENLABS_VOICE_ID = '${elevenlabsVoiceId}';`;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ تم نسخ الكود! الصقه في ملف server.js');
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد Heygen - جمع المعلومات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #667eea;
+        }
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .step h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .step-content {
+            margin-top: 1rem;
+        }
+        .link-btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: all 0.3s;
+        }
+        .link-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .info-box {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .info-box strong {
+            color: #1976D2;
+        }
+        .code-box {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .copy-btn:hover {
+            background: #218838;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 0.5rem 0;
+            padding-right: 2rem;
+            position: relative;
+        }
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            right: 0;
+            font-size: 1.2rem;
+        }
+        .checklist li.done:before {
+            content: "✓";
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 مساعد Heygen - جمع المعلومات</h1>
+        <p class="subtitle">اتبع الخطوات بالترتيب لجمع جميع المعلومات المطلوبة</p>
+
+        <!-- Step 1: API Key -->
+        <div class="step">
+            <h3><span class="step-number">1</span> الحصول على مفتاح API</h3>
+            <div class="step-content">
+                <ol>
+                    <li>سجّل دخولك إلى حساب Heygen</li>
+                    <li>اضغط على <strong>صورة الملف الشخصي</strong> (أعلى اليمين)</li>
+                    <li>اختر <strong>"Settings"</strong> ثم <strong>"API"</strong></li>
+                    <li>اضغط <strong>"Create API Key"</strong></li>
+                    <li>انسخ المفتاح فوراً واحفظه</li>
+                </ol>
+                <a href="https://app.heygen.com/settings/api" target="_blank" class="link-btn">
+                    🔗 فتح صفحة API Settings
+                </a>
+                <div class="info-box">
+                    <strong>💡 نصيحة:</strong> المفتاح يظهر مرة واحدة فقط! تأكد من نسخه فوراً.
+                </div>
+                <div class="code-box">
+                    <div>الصق المفتاح هنا بعد نسخه:</div>
+                    <input type="text" id="apiKey" placeholder="sk_..." style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; background: #1e1e1e; color: #f8f8f2; border: 1px solid #444; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Avatar ID -->
+        <div class="step">
+            <h3><span class="step-number">2</span> الحصول على Avatar ID (الشخصية)</h3>
+            <div class="step-content">
+                <ol>
+                    <li>اذهب إلى قسم <strong>"Avatars"</strong></li>
+                    <li>ابحث عن شخصية كرتونية أو أنشئ واحدة جديدة</li>
+                    <li>اضغط على الشخصية لفتحها</li>
+                    <li>انسخ <strong>Avatar ID</strong> من معلومات الشخصية</li>
+                </ol>
+                <a href="https://app.heygen.com/avatars" target="_blank" class="link-btn">
+                    🔗 فتح صفحة Avatars
+                </a>
+                <div class="info-box">
+                    <strong>💡 نصيحة:</strong> Avatar ID عادة يكون مثل: <code>avatar_xxxxx</code> أو رقم فقط
+                </div>
+                <div class="code-box">
+                    <div>الصق Avatar ID هنا:</div>
+                    <input type="text" id="avatarId" placeholder="avatar_xxxxx" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; background: #1e1e1e; color: #f8f8f2; border: 1px solid #444; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Voice ID -->
+        <div class="step">
+            <h3><span class="step-number">3</span> الحصول على Voice ID (الصوت)</h3>
+            <div class="step-content">
+                <ol>
+                    <li>اذهب إلى قسم <strong>"Voices"</strong></li>
+                    <li>ابحث عن <strong>"Arabic"</strong> أو <strong>"Saudi"</strong></li>
+                    <li>اختر صوت سعودي (ذكر أو أنثى)</li>
+                    <li>استمع للتأكد من اللهجة</li>
+                    <li>انسخ <strong>Voice ID</strong></li>
+                </ol>
+                <a href="https://app.heygen.com/voices" target="_blank" class="link-btn">
+                    🔗 فتح صفحة Voices
+                </a>
+                <div class="info-box">
+                    <strong>💡 نصيحة:</strong> Voice ID عادة يكون مثل: <code>ar-SA-Male</code> أو <code>ar-SA-Female</code>
+                </div>
+                <div class="code-box">
+                    <div>الصق Voice ID هنا:</div>
+                    <input type="text" id="voiceId" placeholder="ar-SA-Male" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; background: #1e1e1e; color: #f8f8f2; border: 1px solid #444; border-radius: 4px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Update Code -->
+        <div class="step">
+            <h3><span class="step-number">4</span> تحديث الكود</h3>
+            <div class="step-content">
+                <p>بعد جمع جميع المعلومات، انسخ الكود التالي:</p>
+                <div class="code-box" id="codeOutput">
+                    <div style="color: #f92672;">// افتح ملف server.js وحدث هذه الأسطر:</div>
+                    <div style="margin-top: 1rem;">
+                        <div style="color: #a6e22e;">const HEYGEN_API_KEY</div> = <div style="color: #e6db74;" id="apiKeyOutput">'YOUR_API_KEY_HERE'</div>;<br><br>
+                        <div style="color: #a6e22e;">const DEFAULT_AVATAR_ID</div> = <div style="color: #e6db74;" id="avatarIdOutput">'YOUR_AVATAR_ID_HERE'</div>;<br><br>
+                        <div style="color: #a6e22e;">const DEFAULT_VOICE_ID</div> = <div style="color: #e6db74;" id="voiceIdOutput">'YOUR_VOICE_ID_HERE'</div>;
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copyCode()">📋 نسخ الكود</button>
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>⚠️ مهم:</strong> بعد التحديث، أعد تشغيل الخادم (Ctrl+C ثم npm start)
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="step">
+            <h3>✅ قائمة التحقق</h3>
+            <ul class="checklist">
+                <li id="check1">حصلت على مفتاح API</li>
+                <li id="check2">حصلت على Avatar ID</li>
+                <li id="check3">حصلت على Voice ID</li>
+                <li id="check4">حدثت ملف server.js</li>
+                <li id="check5">أعدت تشغيل الخادم</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Update code output in real-time
+        const apiKeyInput = document.getElementById('apiKey');
+        const avatarIdInput = document.getElementById('avatarId');
+        const voiceIdInput = document.getElementById('voiceId');
+        
+        apiKeyInput.addEventListener('input', updateCode);
+        avatarIdInput.addEventListener('input', updateCode);
+        voiceIdInput.addEventListener('input', updateCode);
+        
+        function updateCode() {
+            const apiKey = apiKeyInput.value || 'YOUR_API_KEY_HERE';
+            const avatarId = avatarIdInput.value || 'YOUR_AVATAR_ID_HERE';
+            const voiceId = voiceIdInput.value || 'YOUR_VOICE_ID_HERE';
+            
+            document.getElementById('apiKeyOutput').textContent = `'${apiKey}'`;
+            document.getElementById('avatarIdOutput').textContent = `'${avatarId}'`;
+            document.getElementById('voiceIdOutput').textContent = `'${voiceId}'`;
+            
+            // Update checklist
+            document.getElementById('check1').classList.toggle('done', apiKeyInput.value && apiKeyInput.value !== '');
+            document.getElementById('check2').classList.toggle('done', avatarIdInput.value && avatarIdInput.value !== '');
+            document.getElementById('check3').classList.toggle('done', voiceIdInput.value && voiceIdInput.value !== '');
+        }
+        
+        function copyCode() {
+            const apiKey = apiKeyInput.value || 'YOUR_API_KEY_HERE';
+            const avatarId = avatarIdInput.value || 'YOUR_AVATAR_ID_HERE';
+            const voiceId = voiceIdInput.value || 'YOUR_VOICE_ID_HERE';
+            
+            const code = `const HEYGEN_API_KEY = '${apiKey}';
+const DEFAULT_AVATAR_ID = '${avatarId}';
+const DEFAULT_VOICE_ID = '${voiceId}';`;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ تم نسخ الكود! الصقه في ملف server.js');
+            });
+        }
+    </script>
+</body>
+</html>
+
