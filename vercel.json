@@ -1,9 +1,11 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/api/video-status",
-      "destination": "/api/video-status"
+      "source": "/",
+      "destination": "/index.html"
     }
   ]
 }
