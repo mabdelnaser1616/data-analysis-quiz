@@ -1,6 +1,8 @@
 // API Keys
-const CHATGPT_API_KEY = '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';
-// Note: D-ID and ElevenLabs API keys are configured in server.js
+// ⚠️ مهم: أضف ChatGPT API Key هنا بعد رفع المشروع على GitHub
+// احصل على API Key من: https://platform.openai.com/api-keys
+const CHATGPT_API_KEY = 'YOUR_CHATGPT_API_KEY_HERE';
+// Note: D-ID and ElevenLabs API keys are configured in server.js (or Vercel Environment Variables)
 
 // Questions about Data Analysis
 const questions = [
